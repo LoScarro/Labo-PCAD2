@@ -20,10 +20,21 @@ public class Evento{
     public void AggiungiPosti(int posti){
         this.postiLiberi+=posti;
     }
+
     public String getName(){
         return this.nome;
     }
+    
     public int getPostiLiberi(){
         return this.postiLiberi;
+    }
+    
+    public void Prenota(String id){
+        if(coda.isEmpty()){
+            postiLiberi--;
+        }
+        else{
+            coda.add(id);
+        }
     }
 }
