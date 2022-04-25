@@ -1,24 +1,20 @@
 package eventi;
 
-import java.util.concurrent.*;
 
 public class Evento{
     private String nome;
-    private int postiLiberi;
-    private BlockingQueue<String> coda;
+    private Integer postiLiberi;
     
     public Evento(String nome, int postiLiberi){
         this.nome=nome;
         this.postiLiberi=postiLiberi;
-        this.coda=new LinkedBlockingDeque<>();
-    }
-
-    public void AggiungiAcoda(String persona){
-        this.coda.add(persona);
     }
 
     public void AggiungiPosti(int posti){
-        this.postiLiberi+=posti;
+        synchronized(postiLiberi){
+            this.postiLiberi+=posti;
+            //postiLiberi.notifyAll();      Controllare per la concorrenza
+        }
     }
 
     public String getName(){
@@ -29,12 +25,18 @@ public class Evento{
         return this.postiLiberi;
     }
     
-    public void Prenota(String id){
-        if(coda.isEmpty()){
-            postiLiberi--;
-        }
-        else{
-            coda.add(id);
+    public void Prenota(int posti){
+        synchronized(postiLiberi){
+            
+            while(postiLiberi-posti<0) {
+                try {
+                postiLiberi.wait();
+                }
+                catch (Exception e){
+                    System.out.println("Thread  interrupted.");
+                }
+            }
+            postiLiberi-=posti;
         }
     }
 }

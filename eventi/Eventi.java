@@ -60,12 +60,12 @@ public class Eventi {
             throw new IllegalArgumentException();
     }
 
-    public void Prenota(String nome, String id){
+    public void Prenota(String nome, int posti){
         if(!isIn(nome)){
             throw new IllegalArgumentException();
         }
         Evento evento = getEvento(nome);
-        evento.Prenota(id);
+        evento.Prenota(posti);
     }
 
 }
