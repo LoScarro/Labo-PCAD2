@@ -1,4 +1,5 @@
 import eventi.Eventi;
+import eventi.Admin;
 
 import java.util.concurrent.ThreadPoolExecutor;
 //import java.util.concurrent.ExecutorService;
@@ -8,71 +9,41 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class Test {
 
+    private volatile static Eventi lista = new Eventi();
+
     public static void main(String args[]) {
 
-        Eventi lista = new Eventi();
 
-        ThreadPoolExecutor pool = new ThreadPoolExecutor(
-                4,
-                10,
-                1, TimeUnit.MINUTES,
-                new ArrayBlockingQueue<Runnable>(10));
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(4, 10, 1, TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(10));
 
-        pool.execute(new Runnable() {
-            @Override
-            public void run() {
-                Admin(lista);
-                lista.ListaEventi();
+        for (int i = 0; i < 2; i++) {
+            try{
+                
+                pool.submit(new Admin(lista));
+            
+            } catch (IllegalArgumentException e) {
+                System.out.println(e);
             }
-        });
-
-        /*
-         * ExecutorService executor = Executors.newFixedThreadPool(2);
-         * 
-         * executor.submit(new Runnable(){
-         * public void run(){
-         * Admin(lista);
-         * }
-         * });
-         * 
-         * executor.submit(new Runnable(){
-         * public void run(){
-         * Utente(lista);
-         * }
-         * });
-         * executor.shutdown();
-         * lista.Crea("Jova", 122);
-         * lista.ListaEventi();
-         * lista.Aggiungi("Jova", 22);
-         * lista.ListaEventi();
-         * lista.Chiudi("Jova");
-         * lista.ListaEventi();
-         * lista.Crea("Jova", 1222);
-         * lista.ListaEventi();
-         * lista.Prenota("Jova", 10);
-         * lista.ListaEventi();
-         */
-
-    }
-
-    public static void Admin(Eventi evento) {
-        evento.Crea("Jova", 122);
-        try {
-            Thread.sleep(400);
-        } catch (Exception e) {
-            System.out.println(e);
+            
+            lista.ListaEventi();
         }
-        evento.Aggiungi("Jova", 22);
-        try {
-            Thread.sleep(400);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        // evento.Chiudi("Jova");
-    }
+        
+        pool.shutdown();
+        while (!pool.isTerminated()) {}
+        System.out.println("Finished all threads");
 
-    public static void Utente(Eventi evento) {
-        evento.Prenota("Jova", 10);
-        evento.ListaEventi();
+        /*      DEBUG
+        lista.Crea("Jova", 122);
+        lista.ListaEventi();
+        lista.Aggiungi("Jova", 22);
+        lista.ListaEventi();
+        lista.Chiudi("Jova");
+        lista.ListaEventi();
+        lista.Crea("Jova", 1222);
+        lista.ListaEventi();
+        lista.Prenota("Jova", 10);
+        lista.ListaEventi();
+        */
+
     }
 }

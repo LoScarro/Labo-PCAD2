@@ -2,25 +2,31 @@ package eventi;
 
 public class Admin implements Runnable {
 
-    Eventi lista;
+    private final Eventi lista;
 
     public Admin(Eventi lista) {
         this.lista = lista;
     }
+    
+    @Override
+    public synchronized void run() {
+        try{
 
-    public void run() {
-        lista.Crea("Jova", 122);
-        try {
-            Thread.sleep(400);
-        } catch (Exception e) {
+            lista.Crea("Jova", 122);
+            
+            Thread.sleep(1);
+            
+            lista.Aggiungi("Jova", 22);
+            
+            Thread.sleep(1);
+            
+            //lista.Chiudi("Jova");
+        } 
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e) {
             System.out.println(e);
         }
-        lista.Aggiungi("Jova", 22);
-        try {
-            Thread.sleep(400);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        lista.Chiudi("Jova");
     }
 }

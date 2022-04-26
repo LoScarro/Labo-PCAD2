@@ -7,29 +7,37 @@ public class Eventi {
     private ArrayBlockingQueue<Evento> listaEventi = new ArrayBlockingQueue<Evento>(10);
 
     public void Crea(String nome, int posti) {
-        if (!isIn(nome)) {
-            Evento nuovoEvento = new Evento(nome, posti);
-            listaEventi.add(nuovoEvento);
-        } else
-            throw new IllegalArgumentException();
+        synchronized(listaEventi){
+            if (!isIn(nome)) {
+                Evento nuovoEvento = new Evento(nome, posti);
+                listaEventi.add(nuovoEvento);
+            } else
+                throw new IllegalArgumentException("Errore: l'evento esiste gia'!");
+        }
     }
 
     public void Aggiungi(String nome, int posti) {
-        Evento evento = getEvento(nome);
-        if (evento != null) {
-            evento.AggiungiPosti(posti);
-        } else {
-            throw new IllegalArgumentException();
+        synchronized(listaEventi){
+            Evento evento = getEvento(nome);
+            if (evento != null) {
+                evento.AggiungiPosti(posti);
+            } else {
+                throw new IllegalArgumentException();
+            }
         }
     }
 
     public void ListaEventi() {
-        if (listaEventi.isEmpty()) {
-            System.out.println("La lista di eventi è vuota");
-        }
-        for (Evento evento : listaEventi) {
-            System.out.println(
-                    "L'evento " + evento.getName() + " ha ancora " + evento.getPostiLiberi() + " posti liberi.");
+        synchronized(listaEventi){
+            if (listaEventi.isEmpty()) {
+                System.out.println("La lista di eventi è vuota");
+            }
+            int i = 1;
+            for (Evento evento : listaEventi) {
+                System.out.println(
+                        i + ") L'evento " + evento.getName() + " ha ancora " + evento.getPostiLiberi() + " posti liberi.");
+                        i++;
+            }
         }
     }
 
@@ -42,13 +50,15 @@ public class Eventi {
         return null;
     }
 
-    private boolean isIn(String nome) {
-        for (Evento evento : listaEventi) {
-            if (evento.getName().equals(nome)) {
-                return true;
+    private  boolean isIn(String nome) {
+        synchronized(listaEventi){
+            for (Evento evento : listaEventi) {
+                if (evento.getName().equals(nome)) {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
     }
 
     public void Chiudi(String nome) {
