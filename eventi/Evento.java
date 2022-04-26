@@ -11,10 +11,10 @@ public class Evento{
     }
 
     public void AggiungiPosti(int posti){
-        synchronized(postiLiberi){
+        //synchronized(postiLiberi){
             this.postiLiberi+=posti;
             //postiLiberi.notifyAll();      Controllare per la concorrenza
-        }
+        //}
     }
 
     public String getName(){
@@ -26,7 +26,7 @@ public class Evento{
     }
     
     public void Prenota(int posti){
-        synchronized(postiLiberi){
+        //synchronized(postiLiberi){
             
             while(postiLiberi-posti<0) {
                 try {
@@ -37,6 +37,6 @@ public class Evento{
                 }
             }
             postiLiberi-=posti;
-        }
+        //}
     }
 }
