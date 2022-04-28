@@ -2,14 +2,22 @@ package eventi;
 
 public class Utente implements Runnable {
 
-    Eventi lista;
+    private final Eventi lista;
+    private final String nome;
+    private final int posti;
 
-    public Utente(Eventi lista) {
+    public Utente(Eventi lista, String nome, int posti) {
         this.lista = lista;
+        this.nome=nome;
+        this.posti=posti;
     }
 
+    @Override
     public void run() {
-        lista.Prenota("Jova", 10);
-        lista.ListaEventi();
+        try {
+            lista.Prenota(nome, posti);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e);
+        }
     }
 }

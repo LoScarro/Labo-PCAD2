@@ -1,38 +1,69 @@
 package eventi;
 
-
-public class Evento{
+public class Evento {
     private String nome;
     private Integer postiLiberi;
-    
-    public Evento(String nome, int postiLiberi){
-        this.nome=nome;
-        this.postiLiberi=postiLiberi;
+
+    public Evento(String nome, int postiLiberi) {
+        this.nome = nome;
+        this.postiLiberi = postiLiberi;
     }
 
-    public synchronized void AggiungiPosti(int posti){
-            this.postiLiberi+=posti;
-            //postiLiberi.notifyAll();      Controllare per la concorrenza
+    public void AggiungiPosti(int posti) {
+        this.postiLiberi += posti;
+        postiLiberi.notify();
     }
 
-    public synchronized String getName(){
+    public String getName() {
         return this.nome;
     }
-    
-    public synchronized int getPostiLiberi(){
+
+    public int getPostiLiberi() {
         return this.postiLiberi;
     }
-    
-    public synchronized void Prenota(int posti){
-            
-            while(postiLiberi-posti<0) {
-                try {
+
+    public void chiudi(){
+        postiLiberi.notify();
+    }
+
+    public synchronized void Prenota(int posti) {
+        boolean isItPrinted = false;        //per stampare una volta sola il messaggio di waiting;
+        while (postiLiberi - posti < 0) {
+            try {
                 postiLiberi.wait();
-                }
-                catch (Exception e){
-                    System.out.println("Thread  interrupted.");
+            } catch (Exception e) {
+                if (isItPrinted == false) {
+                    System.out.println("Sto aspettando che vengano aggiunti dei posti all'evento " + this.nome);
+                    isItPrinted = true;
                 }
             }
-            postiLiberi-=posti;
+            
+        }
+        postiLiberi -= posti;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

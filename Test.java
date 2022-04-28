@@ -1,5 +1,6 @@
 import eventi.Eventi;
 import eventi.Admin;
+import eventi.Utente;
 
 import java.util.concurrent.ThreadPoolExecutor;
 //import java.util.concurrent.ExecutorService;
@@ -13,37 +14,42 @@ public class Test {
 
     public static void main(String args[]) {
 
-
         ThreadPoolExecutor pool = new ThreadPoolExecutor(4, 10, 1, TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(10));
-
-        for (int i = 0; i < 2; i++) {
-            try{
+        
+        for (int i = 0; i < 1; i++) {
+            try {
+                pool.submit(new Admin(lista, "Jova", 122, 44));
+                pool.submit(new Utente(lista, "Jova", 125));
+                pool.submit(new Admin(lista, "Vasco", 143, 12));
+                pool.submit(new Admin(lista, "Madonna", 463, 64));
+                pool.submit(new Admin(lista, "Marley", 6457, 434));
+                pool.submit(new Admin(lista, "Manson", 25, 4354));
+                pool.submit(new Admin(lista, "ACDC", 547, 7654));
+                pool.submit(new Utente(lista, "ACDC", 500));
+                pool.submit(new Admin(lista, "Sabbath", 13, 75));
+                pool.submit(new Utente(lista, "Sabbath", 77));
+                pool.submit(new Admin(lista, "Roses", 865, 23));
+                pool.submit(new Admin(lista, "Logic", 537, 864));
+                pool.submit(new Admin(lista, "Eminem", 235, 753));
+               
+                pool.submit(new Utente(lista, "Eminem", 315));
                 
-                pool.submit(new Admin(lista, "Jova", 122));
-            
+                
+                //pool.submit(new Utente(lista, "Roses", 1000));
+
+                
+
             } catch (IllegalArgumentException e) {
                 System.out.println(e);
             }
-            
-            lista.ListaEventi();
-        }
-        
-        pool.shutdown();
-        while (!pool.isTerminated()) {}
-        System.out.println("Finished all threads");
 
-        /*      DEBUG
-        lista.Crea("Jova", 122);
+        }
+
+        pool.shutdown();
+        while (!pool.isTerminated()) {
+        }
+
         lista.ListaEventi();
-        lista.Aggiungi("Jova", 22);
-        lista.ListaEventi();
-        lista.Chiudi("Jova");
-        lista.ListaEventi();
-        lista.Crea("Jova", 1222);
-        lista.ListaEventi();
-        lista.Prenota("Jova", 10);
-        lista.ListaEventi();
-        */
 
     }
 }

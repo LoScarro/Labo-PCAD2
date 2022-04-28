@@ -4,32 +4,31 @@ public class Admin implements Runnable {
 
     private final Eventi lista;
     private final String nomeEvento;
-    private final int posti;
+    private final int postiIniziali;
+    private final int postiDaAgg;
 
-    public Admin(Eventi lista, String nome, int posti) {
+    public Admin(Eventi lista, String nome, int postiIniziali, int postiDaAgg) {
         this.lista = lista;
-        this.nomeEvento=nome;
-        this.posti=posti;
+        this.nomeEvento = nome;
+        this.postiIniziali = postiIniziali;
+        this.postiDaAgg = postiDaAgg;
     }
-    
-    @Override
-    public synchronized void run() {
-        try{
 
-            lista.Crea(nomeEvento, posti);
+    @Override
+    public void run() {
+        try {
+            lista.Crea(nomeEvento, postiIniziali);
+
+            Thread.sleep(1000);
+
+            lista.Aggiungi(nomeEvento, postiDaAgg);
+
+            Thread.sleep(1000);
             
-            Thread.sleep(1);
-            
-            lista.Aggiungi(nomeEvento, posti);
-            
-            Thread.sleep(1);
-            
-            //lista.Chiudi("Jova");
-        } 
-        catch (InterruptedException e) {
+            //lista.Chiudi(nomeEvento);
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             System.out.println(e);
         }
     }
