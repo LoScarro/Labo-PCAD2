@@ -19,7 +19,7 @@ public class Test {
         for (int i = 0; i < 2; i++) {
             try{
                 
-                pool.submit(new Admin(lista));
+                pool.submit(new Admin(lista, "Jova", 122));
             
             } catch (IllegalArgumentException e) {
                 System.out.println(e);

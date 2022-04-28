@@ -6,29 +6,28 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class Eventi {
     private ArrayBlockingQueue<Evento> listaEventi = new ArrayBlockingQueue<Evento>(10);
 
-    public void Crea(String nome, int posti) {
-        synchronized(listaEventi){
+    public synchronized void Crea(String nome, int posti) {
+        
             if (!isIn(nome)) {
                 Evento nuovoEvento = new Evento(nome, posti);
                 listaEventi.add(nuovoEvento);
             } else
                 throw new IllegalArgumentException("Errore: l'evento esiste gia'!");
-        }
     }
 
-    public void Aggiungi(String nome, int posti) {
-        synchronized(listaEventi){
+    public synchronized void Aggiungi(String nome, int posti) {
+        
             Evento evento = getEvento(nome);
             if (evento != null) {
                 evento.AggiungiPosti(posti);
             } else {
                 throw new IllegalArgumentException();
             }
-        }
+        
     }
 
-    public void ListaEventi() {
-        synchronized(listaEventi){
+    public synchronized void ListaEventi() {
+        
             if (listaEventi.isEmpty()) {
                 System.out.println("La lista di eventi è vuota");
             }
@@ -38,10 +37,10 @@ public class Eventi {
                         i + ") L'evento " + evento.getName() + " ha ancora " + evento.getPostiLiberi() + " posti liberi.");
                         i++;
             }
-        }
+        
     }
 
-    private Evento getEvento(String nome) {
+    private synchronized Evento getEvento(String nome) {
         for (Evento evento : listaEventi) {
             if (evento.getName().equals(nome)) {
                 return evento;
@@ -50,18 +49,16 @@ public class Eventi {
         return null;
     }
 
-    private  boolean isIn(String nome) {
-        synchronized(listaEventi){
+    private synchronized boolean isIn(String nome) {
             for (Evento evento : listaEventi) {
                 if (evento.getName().equals(nome)) {
                     return true;
                 }
             }
             return false;
-        }
     }
 
-    public void Chiudi(String nome) {
+    public synchronized void Chiudi(String nome) {
         if (isIn(nome)) {
             Evento evento = getEvento(nome);
             listaEventi.remove(evento);
@@ -69,7 +66,7 @@ public class Eventi {
             throw new IllegalArgumentException();
     }
 
-    public void Prenota(String nome, int posti) {
+    public synchronized void Prenota(String nome, int posti) {
         if (!isIn(nome)) {
             throw new IllegalArgumentException();
         }

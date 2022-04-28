@@ -3,20 +3,24 @@ package eventi;
 public class Admin implements Runnable {
 
     private final Eventi lista;
+    private final String nomeEvento;
+    private final int posti;
 
-    public Admin(Eventi lista) {
+    public Admin(Eventi lista, String nome, int posti) {
         this.lista = lista;
+        this.nomeEvento=nome;
+        this.posti=posti;
     }
     
     @Override
     public synchronized void run() {
         try{
 
-            lista.Crea("Jova", 122);
+            lista.Crea(nomeEvento, posti);
             
             Thread.sleep(1);
             
-            lista.Aggiungi("Jova", 22);
+            lista.Aggiungi(nomeEvento, posti);
             
             Thread.sleep(1);
             
