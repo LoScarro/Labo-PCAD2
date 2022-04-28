@@ -11,7 +11,7 @@ public class Evento {
 
     public void AggiungiPosti(int posti) {
         this.postiLiberi += posti;
-        postiLiberi.notify();
+        //postiLiberi.notify();
     }
 
     public String getName() {
@@ -22,23 +22,7 @@ public class Evento {
         return this.postiLiberi;
     }
 
-    public void chiudi(){
-        postiLiberi.notify();
-    }
-
-    public synchronized void Prenota(int posti) {
-        boolean isItPrinted = false;        //per stampare una volta sola il messaggio di waiting;
-        while (postiLiberi - posti < 0) {
-            try {
-                postiLiberi.wait();
-            } catch (Exception e) {
-                if (isItPrinted == false) {
-                    System.out.println("Sto aspettando che vengano aggiunti dei posti all'evento " + this.nome);
-                    isItPrinted = true;
-                }
-            }
-            
-        }
+    public void Prenota(int posti) {
         postiLiberi -= posti;
     }
 }

@@ -10,24 +10,21 @@ public class Eventi {
     private ConcurrentHashMap<String, Evento> listaEventi = new ConcurrentHashMap<>();
 
     public synchronized void Crea(String nome, int posti) {
-        synchronized (listaEventi) {
-            Evento nuovoEvento = new Evento(nome, posti);
-            listaEventi.putIfAbsent(nome, nuovoEvento);
-            listaEventi.notifyAll();
-            System.out.println("Ho creato l'evento " + nome + " con " + posti + " posti");
-        }
+        Evento nuovoEvento = new Evento(nome, posti);
+        listaEventi.putIfAbsent(nome, nuovoEvento);
+
+        System.out.println("Ho creato l'evento " + nome + " con " + posti + " posti");
+
     }
 
     public synchronized void Aggiungi(String nome, int posti) {
-        synchronized (listaEventi) {
-            Evento evento = listaEventi.get(nome);
-            if (evento != null) {
-                evento.AggiungiPosti(posti);
-                listaEventi.notifyAll();
-                System.out.println("Ho aggiunto " + posti + " posti all'evento " + nome);
-            } else {
-                throw new IllegalArgumentException("Non puoi aggiungere posti a questo evento poichè non esiste");
-            }
+        Evento evento = listaEventi.get(nome);
+        if (evento != null) {
+            evento.AggiungiPosti(posti);
+            notify();
+            System.out.println("Ho aggiunto " + posti + " posti all'evento " + nome);
+        } else {
+            throw new IllegalArgumentException("Non puoi aggiungere posti a questo evento poichè non esiste");
         }
     }
 
@@ -46,40 +43,34 @@ public class Eventi {
     }
 
     public void Chiudi(String nome) {
-        synchronized (listaEventi) {
-            listaEventi.remove(nome);
-            Evento evento = listaEventi.get(nome);
-            evento.chiudi();
-            listaEventi.notifyAll();
-        }
+        listaEventi.remove(nome);
     }
 
     public synchronized void Prenota(String nome, int posti) { // non può essere synchronized altrimenti quando va in wait blocca tutti gli altri processi
-        
-        boolean isItPrinted = false;        //per stampare una volta sola il messaggio di waiting
+
+        boolean isItPrinted = false; // per stampare una volta sola il messaggio di waiting
 
         while (!listaEventi.containsKey(nome)) {
             try {
-                listaEventi.wait();
-            } catch (Exception e) {
+                wait();
                 if (isItPrinted == false) {
                     System.out.println("Sto aspettando che venga creato l'evento " + nome);
                     isItPrinted = true;
                 }
+            } catch (Exception e) {
             }
         }
 
         isItPrinted = false;
 
-        while (listaEventi.get(nome).getPostiLiberi()<posti) {
+        while (listaEventi.get(nome).getPostiLiberi() < posti) {
             try {
-                listaEventi.wait();
-            }
-            catch (Exception e) {
+                wait();
                 if (isItPrinted == false) {
                     System.out.println("Sto aspettando che vengano aggiunti dei posti all'evento " + nome);
                     isItPrinted = true;
                 }
+            } catch (Exception e) {
             }
         }
         Evento evento = listaEventi.get(nome);
