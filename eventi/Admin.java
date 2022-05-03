@@ -17,15 +17,12 @@ public class Admin implements Runnable {
     @Override
     public void run() {
         try {
-            lista.Crea(nomeEvento, postiIniziali);
-
-            Thread.sleep(1000);
-
+            
             lista.Aggiungi(nomeEvento, postiDaAgg);
 
             Thread.sleep(1000);
             
-            //lista.Chiudi(nomeEvento);
+            lista.Chiudi(nomeEvento);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
