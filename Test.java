@@ -52,7 +52,7 @@ public class Test {
         }*/
 
 
-        ThreadPoolExecutor pool = new ThreadPoolExecutor(4, 10, 1, TimeUnit.MINUTES,
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(4, 15, 1, TimeUnit.MINUTES,
                 new ArrayBlockingQueue<Runnable>(10));
 
         for (int i = 0; i < 1; i++) {
@@ -79,7 +79,7 @@ public class Test {
                 pool.submit(new Utente(lista, "Madonna", 500));
                 pool.submit(new Admin(lista, "Madonna", 100));
                 pool.submit(new Utente(lista, "Beatles", 150));
-                pool.submit(new Admin(lista, "Beatles", 10));
+                pool.submit(new Admin(lista, "Beatles", 100));
 
             } catch (IllegalArgumentException e) {
                 System.out.println(e);
