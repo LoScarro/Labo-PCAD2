@@ -80,6 +80,7 @@ public class Test {
                 pool.submit(new Admin(lista, "Madonna", 100));
                 pool.submit(new Utente(lista, "Beatles", 150));
                 pool.submit(new Admin(lista, "Beatles", 100));
+                //nuidwhgduihgiuopg
 
             } catch (IllegalArgumentException e) {
                 System.out.println(e);
