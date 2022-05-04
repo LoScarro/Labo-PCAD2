@@ -44,21 +44,15 @@ public class Eventi {
 
     public void Chiudi(String nome) {
         listaEventi.remove(nome);
+        System.out.println("Ho chiuso l'evento " + nome);
     }
 
     public synchronized void Prenota(String nome, int posti) { // non può essere synchronized altrimenti quando va in wait blocca tutti gli altri processi
 
         boolean isItPrinted = false; // per stampare una volta sola il messaggio di waiting
 
-        while (!listaEventi.containsKey(nome)) {
-            try {
-                wait();
-                if (isItPrinted == false) {
-                    System.out.println("Sto aspettando che venga creato l'evento " + nome);
-                    isItPrinted = true;
-                }
-            } catch (Exception e) {
-            }
+        if (!listaEventi.containsKey(nome)) {
+            throw new IllegalArgumentException("Non puoi prenotare questo evento poichè o non esiste o è stato già chiuso");
         }
 
         isItPrinted = false;

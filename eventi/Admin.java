@@ -18,9 +18,10 @@ public class Admin implements Runnable {
             
             lista.Aggiungi(nomeEvento, postiDaAgg);
 
-            Thread.sleep(10);
+            Thread.sleep(0);
             
             lista.Chiudi(nomeEvento);
+            
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
