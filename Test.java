@@ -78,7 +78,7 @@ public class Test {
                 pool.submit(new Admin(lista, "Bon Jovi", 10));
                 pool.submit(new Utente(lista, "Madonna", 500));
                 pool.submit(new Admin(lista, "Madonna", 100));
-                pool.submit(new Utente(lista, "Beatles", 1050));
+                pool.submit(new Utente(lista, "Beatles", 150));
                 pool.submit(new Admin(lista, "Beatles", 100));
 
             } catch (IllegalArgumentException e) {
@@ -90,14 +90,12 @@ public class Test {
         pool.shutdown();
         while (!pool.isTerminated()) {
         }
-
+        System.out.println(lista.getPosti("Madonna"));
         lista.ListaEventi();
 
     }
 
-    public static void calculate(String nome, int posti) {
-        noThread.putIfAbsent(nome, posti);
-        int num = noThread.get(nome);
-        noThread.put(nome, posti + num);
+    public static void calculate(String nome) {
+        System.out.println(lista.getPosti(nome));
     }
 }

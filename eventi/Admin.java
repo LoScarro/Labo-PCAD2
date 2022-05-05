@@ -20,7 +20,7 @@ public class Admin implements Runnable {
 
             Thread.sleep(100);
             
-            lista.Chiudi(nomeEvento);
+            //lista.Chiudi(nomeEvento);
             
         } catch (InterruptedException e) {
             e.printStackTrace();

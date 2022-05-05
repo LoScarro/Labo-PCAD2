@@ -48,6 +48,11 @@ public class Eventi {
         System.out.println("Ho chiuso l'evento " + nome);
     }
 
+    public int getPosti(String nome) {
+        Evento evento = listaEventi.get(nome);
+        return evento.getPostiLiberi();
+    }
+
     public synchronized void Prenota(String nome, int posti) { // non può essere synchronized altrimenti quando va in wait blocca tutti gli altri processi
 
         boolean isItPrinted = false; // per stampare una volta sola il messaggio di waiting
