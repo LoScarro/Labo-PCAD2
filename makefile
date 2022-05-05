@@ -3,6 +3,7 @@ CC		= javac
 EX		= java
 EXFILE = Test
 OUT = *.class
+FLAG = -ea
 
 
 all: $(OBJECTS)
@@ -11,3 +12,7 @@ all: $(OBJECTS)
 
 clean:
 	rm **/$(OUT)
+
+ass: $(OBJECTS)
+	$(CC) $(SOURCE)
+	$(EX) $(FLAG) $(EXFILE)

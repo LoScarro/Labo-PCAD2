@@ -2,7 +2,7 @@ package eventi;
 
 public class Evento {
     private String nome;
-    private Integer postiLiberi;
+    private int postiLiberi;
 
     public Evento(String nome, int postiLiberi) {
         this.nome = nome;
@@ -23,7 +23,7 @@ public class Evento {
     }
 
     public void Prenota(int posti) {
-        postiLiberi -= posti;
+        this.postiLiberi -= posti;
     }
 }
 

@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Eventi {
 
     private ConcurrentHashMap<String, Evento> listaEventi = new ConcurrentHashMap<>();
+    
 
     public synchronized void Crea(String nome, int posti) {
         Evento nuovoEvento = new Evento(nome, posti);
@@ -49,11 +50,10 @@ public class Eventi {
     }
 
     public int getPosti(String nome) {
-        Evento evento = listaEventi.get(nome);
-        return evento.getPostiLiberi();
+        return listaEventi.get(nome).getPostiLiberi();
     }
 
-    public synchronized void Prenota(String nome, int posti) { // non può essere synchronized altrimenti quando va in wait blocca tutti gli altri processi
+    public synchronized void Prenota(String nome, int posti) {
 
         boolean isItPrinted = false; // per stampare una volta sola il messaggio di waiting
 
