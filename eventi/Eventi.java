@@ -42,8 +42,9 @@ public class Eventi {
         }
     }
 
-    public void Chiudi(String nome) {
+    public synchronized void Chiudi(String nome) {
         listaEventi.remove(nome);
+        notifyAll();
         System.out.println("Ho chiuso l'evento " + nome);
     }
 
@@ -65,7 +66,7 @@ public class Eventi {
         }
         Evento evento = listaEventi.get(nome);
         if(evento==null){
-            throw new IllegalArgumentException("Non puoi prenotare questo evento poichè o non esiste o è stato già chiuso");
+            throw new IllegalArgumentException("Non puoi prenotare l'evento " + nome + " poichè o non esiste o è stato già chiuso");
         }
         evento.Prenota(posti);
         System.out.println("Ho prenotato " + posti + " posti per l'evento " + nome);

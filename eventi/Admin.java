@@ -18,7 +18,7 @@ public class Admin implements Runnable {
             
             lista.Aggiungi(nomeEvento, postiDaAgg);
 
-            Thread.sleep(0);
+            Thread.sleep(100);
             
             lista.Chiudi(nomeEvento);
             
