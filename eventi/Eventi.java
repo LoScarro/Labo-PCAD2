@@ -51,10 +51,6 @@ public class Eventi {
 
         boolean isItPrinted = false; // per stampare una volta sola il messaggio di waiting
 
-        if (!listaEventi.containsKey(nome)) {
-            throw new IllegalArgumentException("Non puoi prenotare questo evento poichè o non esiste o è stato già chiuso");
-        }
-
         isItPrinted = false;
 
         while (listaEventi.get(nome).getPostiLiberi() < posti) {
@@ -68,6 +64,9 @@ public class Eventi {
             }
         }
         Evento evento = listaEventi.get(nome);
+        if(evento==null){
+            throw new IllegalArgumentException("Non puoi prenotare questo evento poichè o non esiste o è stato già chiuso");
+        }
         evento.Prenota(posti);
         System.out.println("Ho prenotato " + posti + " posti per l'evento " + nome);
     }
