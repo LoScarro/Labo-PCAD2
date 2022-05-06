@@ -9,13 +9,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.*;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Test {
 
-    private volatile static Eventi lista = new Eventi();
-
-    private static ConcurrentHashMap<String, Integer> controllo;
+    private volatile static Eventi lista = new Eventi();  
 
     public static List<String> inizialize(){
         List<String> datiEventi = new ArrayList<String>();
@@ -66,20 +63,10 @@ public class Test {
         System.out.println("--------------------------------------------------");
         System.out.println("              Prenotazioni concluse!              ");
         System.out.println("--------------------------------------------------");
+        
         lista.ListaEventi();
-        calculate();
+        lista.check();
     }
-
-    public static void calculate() {
-
-        String nome;
-        int posti;
-
-        controllo = lista.getControllo();
-
-        for (String evento : controllo.keySet()){
-            assert controllo.get(evento) == lista.getPosti(evento);
-        }
 
 
         
@@ -100,5 +87,4 @@ public class Test {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}*/
-    }
 }

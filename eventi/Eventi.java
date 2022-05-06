@@ -8,27 +8,31 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Eventi {
 
     private ConcurrentHashMap<String, Evento> listaEventi = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String, Integer> controllo = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Integer> controllo = new ConcurrentHashMap<>();       //usata per verificare che le operzioni siano andate a buon fine
+    //essendo che quando un evento viene chiuso questo viene cancellato dalla hashmap per fare le assertion devo avere un log di tutti gli eventi che ho cancellato dalla hashmap con i relativi posti liberi rimanenti
+    private ConcurrentHashMap<String, Integer> log = new ConcurrentHashMap<>();
 
-    public ConcurrentHashMap getControllo() {
+    public ConcurrentHashMap<String, Integer> getControllo() {
         return controllo;
     }
     
-    public synchronized void Crea(String nome, int posti) {
-        controllo.putIfAbsent(nome, posti);
+    public void Crea(String nome, int posti) {
         
         Evento nuovoEvento = new Evento(nome, posti);
         listaEventi.putIfAbsent(nome, nuovoEvento);
+        controllo.putIfAbsent(nome, posti);
 
         System.out.println("Ho creato l'evento " + nome + " con " + posti + " posti");
 
     }
 
     public synchronized void Aggiungi(String nome, int posti) {
-        controllo.replace(nome, posti+listaEventi.get(nome).getPostiLiberi());
+
         Evento evento = listaEventi.get(nome);
+        
         if (evento != null) {
             evento.AggiungiPosti(posti);
+            controllo.replace(nome, controllo.get(nome) + posti);
             notify();
             System.out.println("Ho aggiunto " + posti + " posti all'evento " + nome);
         } else {
@@ -37,23 +41,34 @@ public class Eventi {
     }
 
     public void ListaEventi() {
+        
         if (listaEventi.isEmpty()) {
             System.out.println("La lista di eventi è vuota");
         } else {
             int i = 1;
+            
             for (String evento : listaEventi.keySet()) {
                 System.out.println(
                         i + ") L'evento " + evento + " ha ancora " + listaEventi.get(evento).getPostiLiberi()
                                 + " posti liberi.");
                 i++;
+            
             }
         }
     }
 
     public synchronized void Chiudi(String nome) {
         listaEventi.remove(nome);
+        log.put(nome, controllo.get(nome));
         notifyAll();
         System.out.println("Ho chiuso l'evento " + nome);
+    }
+
+    //controllo che effettivamente le operazioni siano andate a buon fine
+    public void check(){
+        for (String evento : controllo.keySet()){
+            assert controllo.get(evento) == log.get(evento);
+        }
     }
 
     public int getPosti(String nome) {
@@ -61,13 +76,9 @@ public class Eventi {
     }
 
     public synchronized void Prenota(String nome, int posti) {
-
-        controllo.replace(nome, listaEventi.get(nome).getPostiLiberi()-posti);
-
         boolean isItPrinted = false; // per stampare una volta sola il messaggio di waiting
-
         isItPrinted = false;
-
+        
         while (listaEventi.get(nome).getPostiLiberi() < posti) {
             try {
                 wait();
@@ -78,11 +89,15 @@ public class Eventi {
             } catch (Exception e) {
             }
         }
+        
         Evento evento = listaEventi.get(nome);
+        
         if(evento==null){
             throw new IllegalArgumentException("Non puoi prenotare l'evento " + nome + " poichè o non esiste o è stato già chiuso");
         }
+        
         evento.Prenota(posti);
+        controllo.replace(nome, controllo.get(nome) - posti);
         System.out.println("Ho prenotato " + posti + " posti per l'evento " + nome);
     }
 
