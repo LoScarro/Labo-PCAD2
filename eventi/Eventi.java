@@ -8,9 +8,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Eventi {
 
     private ConcurrentHashMap<String, Evento> listaEventi = new ConcurrentHashMap<>();
-    
+    private ConcurrentHashMap<String, Integer> controllo = new ConcurrentHashMap<>();
 
+    public ConcurrentHashMap getControllo() {
+        return controllo;
+    }
+    
     public synchronized void Crea(String nome, int posti) {
+        controllo.putIfAbsent(nome, posti);
+        
         Evento nuovoEvento = new Evento(nome, posti);
         listaEventi.putIfAbsent(nome, nuovoEvento);
 
@@ -19,6 +25,7 @@ public class Eventi {
     }
 
     public synchronized void Aggiungi(String nome, int posti) {
+        controllo.replace(nome, posti+listaEventi.get(nome).getPostiLiberi());
         Evento evento = listaEventi.get(nome);
         if (evento != null) {
             evento.AggiungiPosti(posti);
@@ -54,6 +61,8 @@ public class Eventi {
     }
 
     public synchronized void Prenota(String nome, int posti) {
+
+        controllo.replace(nome, listaEventi.get(nome).getPostiLiberi()-posti);
 
         boolean isItPrinted = false; // per stampare una volta sola il messaggio di waiting
 

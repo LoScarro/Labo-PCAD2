@@ -9,10 +9,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.*;
 import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Test {
 
     private volatile static Eventi lista = new Eventi();
+
+    private static ConcurrentHashMap<String, Integer> controllo;
 
     public static List<String> inizialize(){
         List<String> datiEventi = new ArrayList<String>();
@@ -72,7 +75,16 @@ public class Test {
         String nome;
         int posti;
 
-        BufferedReader reader;
+        controllo = lista.getControllo();
+
+        for (String evento : controllo.keySet()){
+            assert controllo.get(evento) == lista.getPosti(evento);
+        }
+
+
+        
+
+        /*BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(
 					"assertion"));
@@ -87,6 +99,6 @@ public class Test {
 			reader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
     }
 }
