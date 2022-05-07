@@ -8,9 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Eventi {
 
     private ConcurrentHashMap<String, Evento> listaEventi = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String, Integer> controllo = new ConcurrentHashMap<>();       //usata per verificare che le operzioni siano andate a buon fine
-    //essendo che quando un evento viene chiuso questo viene cancellato dalla hashmap per fare le assertion devo avere un log di tutti gli eventi che ho cancellato dalla hashmap con i relativi posti liberi rimanenti
-    private ConcurrentHashMap<String, Integer> log = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Integer> controllo = new ConcurrentHashMap<>();//usata per verificare che le operzioni siano andate a buon fine
 
     public ConcurrentHashMap<String, Integer> getControllo() {
         return controllo;
@@ -43,7 +41,7 @@ public class Eventi {
     public void ListaEventi() {
         
         if (listaEventi.isEmpty()) {
-            System.out.println("La lista di eventi è vuota");
+            System.out.println("La lista di eventi è vuota, ha funzionato tutto!");
         } else {
             int i = 1;
             
@@ -57,18 +55,12 @@ public class Eventi {
         }
     }
 
+    // Prima di chiudere un evento controllo se i posti liberi corrispondono a quelli contenuti nella hashmap "controllo"
     public synchronized void Chiudi(String nome) {
+        assert controllo.get(nome) == listaEventi.get(nome).getPostiLiberi(): "I posti disponibili dell'evento " + nome + " non corrispondono!";
         listaEventi.remove(nome);
-        log.put(nome, controllo.get(nome));
         notifyAll();
         System.out.println("Ho chiuso l'evento " + nome);
-    }
-
-    //controllo che effettivamente le operazioni siano andate a buon fine
-    public void check(){
-        for (String evento : controllo.keySet()){
-            assert controllo.get(evento) == log.get(evento);
-        }
     }
 
     public int getPosti(String nome) {

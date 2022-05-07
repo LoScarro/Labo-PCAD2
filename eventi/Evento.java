@@ -11,7 +11,6 @@ public class Evento {
 
     public void AggiungiPosti(int posti) {
         this.postiLiberi += posti;
-        //postiLiberi.notify();
     }
 
     public String getName() {

@@ -26,6 +26,8 @@ public class Admin implements Runnable {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
             System.out.println(e);
+        } catch (AssertionError e){
+            System.out.println(e);
         }
     }
 }

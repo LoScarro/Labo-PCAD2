@@ -19,7 +19,7 @@ public class Test {
         BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(
-					"nomieventi"));
+					"nomieventi.txt"));
 			String line = reader.readLine();
 			while (line != null) {
                 datiEventi.add(line);
@@ -65,26 +65,5 @@ public class Test {
         System.out.println("--------------------------------------------------");
         
         lista.ListaEventi();
-        lista.check();
     }
-
-
-        
-
-        /*BufferedReader reader;
-		try {
-			reader = new BufferedReader(new FileReader(
-					"assertion"));
-			String line = reader.readLine();
-			while (line != null) {
-                nome = line;
-                line = reader.readLine();
-                posti = Integer.parseInt(line);
-				assert lista.getPosti(nome) == posti;
-				line = reader.readLine();
-			}
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
 }
