@@ -4,8 +4,6 @@ Per cancellare file .class: `make clean`
 
 Nel file `nomieventi.txt` vi sono gli eventi che verranno gestiti dai thread, sono costruiti in questo modo:
 
-Markup :
-
 * Nome evento
 * Posti che Utente vuole prenotare
 * Posti che Admin aggiunge
