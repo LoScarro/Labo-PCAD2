@@ -1,5 +1,3 @@
-Laboratorio svolto da Scarrà Davide (s4798949) e Ferrari Luca (s4784573)
-
 Per compilare ed eseguire con le assertion: make all
 Per compilare ed eseguire senza assertion: make ass
 Per cancellare file .class: make clean
