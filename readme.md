@@ -9,7 +9,7 @@ Nel file `nomieventi.txt` vi sono gli eventi che verranno gestiti dai thread, so
 * posti che Admin aggiunge
 * posti con cui viene creato l'evento
 
-Consegna:
+**Consegna:**
 Consideriamo un sistema di gestione di eventi (es concerti, conferenze, ecc).
 Si vuole definire una classe Java per garantire l’accesso thread-safe ad una classe con metodi per gestire eventi e posti disponibili.
 In particolare utilizzando i monitor di sincronizzazione di Java, la classe EVENTI deve fornire
